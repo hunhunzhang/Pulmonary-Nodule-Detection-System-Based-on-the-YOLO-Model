@@ -54,6 +54,20 @@
 3. **数据持久化模块**：将结果坐标通过反归一化还原后，存储为专属文本信息 (`00000X_info.txt`)，沉淀至自动建立的 `result/` 子目录。
 4. **前端交互与视图模块 (CAD GUI)**：工具栏控制视图、中心画布区(Canvas) 的缩放事件监听、左侧目录树映射、以及右下方数据文本面板(总数/细节/日志)的挂载和更新。
 
+## 项目目录结构
+
+```text
+.
+├─ main.py
+├─ requirements.txt
+├─ README.md
+├─ assets/
+└─ training/
+  ├─ get_data.py
+  ├─ yolo_train.py
+  └─ yolo_evaluate.py
+```
+
 ## 环境搭建与使用说明
 
 ### 1. 环境依赖配置
@@ -74,7 +88,31 @@ python main.py
 
 *(注：如果已有经 `Pyinstaller` 构建的 `.exe` 文件，双击运行即可，无需执行环境配置步骤)*
 
-### 3. 操作流程指南
+### 3. 模型训练与评估
+
+训练相关脚本已统一放入 `training/` 目录，建议按以下顺序执行：
+
+1. **数据集整理（生成 YOLO 格式）**
+
+```bash
+python training/get_data.py
+```
+
+2. **模型训练**
+本项目模型是在kaggle平台上进行训练的，在训练前需要将生成的data导入平台中。
+```bash
+python training/yolo_train.py
+```
+
+3. **模型评估**
+
+```bash
+python training/yolo_evaluate.py
+```
+
+说明：当前脚本中的数据路径以本地/云端示例路径为主（如 `E:/...`、`/kaggle/...`），训练前请先按你的实际环境修改 `training/get_data.py`、`training/yolo_train.py`、`training/yolo_evaluate.py` 中的路径参数。
+
+### 4. 操作流程指南
 
 1. **加载模型**：点击工具栏的**「选择模型」**按钮，选取本项目目录中预训练好的 YOLO 模型文件（例如 `yolo1.pt` 或 `yolo2.pt`）。
 2. **选择图像**：点击**「选择图像」**，导入需要诊断的 DICOM (`.dcm`) 切片图像。图像会在系统左侧列表及中间画布区展示。
